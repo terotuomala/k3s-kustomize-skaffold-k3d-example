@@ -22,5 +22,5 @@ portForward:
 profiles:
   - name: local
     activation:
-      - kubeContext: k3s-default
+      - kubeContext: k3s-local
         command: dev
