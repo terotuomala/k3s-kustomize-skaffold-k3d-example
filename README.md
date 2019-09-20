@@ -2,7 +2,7 @@
 
 An example local k8s development environment using kustomize, skaffold and k3d.
 
-TL;DR
+### TL;DR
 - Bootstraps k3s cluster using k3d
 - Creates a local insecure registry so Skaffold can build images using local Docker
 - Kustomize uses [Directory Structure Based Layout](https://kubectl.docs.kubernetes.io/pages/app_composition_and_deployment/structure_directories.html)
