@@ -1,0 +1,23 @@
+- op: add
+  path: /spec/template/spec/containers/0/resources/limits/cpu
+  value: 25m
+
+- op: add
+  path: /spec/template/spec/containers/0/resources/limits/memory
+  value: 128Mi
+
+- op: add
+  path: /spec/template/spec/containers/0/resources/requests/cpu
+  value: 15m
+
+- op: add
+  path: /spec/template/spec/containers/0/resources/requests/memory
+  value: 64Mi
+
+- op: add
+  path: /spec/template/spec/containers/0/args
+  value: ["yarn run dev"]
+
+- op: add
+  path: /spec/template/spec/containers/0/image
+  value: registry.local:5000/example-app

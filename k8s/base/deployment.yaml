@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-app
+  labels:
+    app: example-app
+    tier: backend
+spec:
+  selector:
+    matchLabels:
+      app: example-app
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: example-app
+        tier: backend
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsNonRoot: true
+      containers:
+        - name: example-app
+          image: example-app:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args: ["yarn start"]
+          resources:
+            limits:
+              cpu: 50m
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          ports:
+            - name: http-port
+              containerPort: 3000
+          securityContext:
+            allowPrivilegeEscalation: false

@@ -1,0 +1,26 @@
+apiVersion: skaffold/v1beta14
+kind: Config
+build:
+  artifacts:
+    - image: registry.local:5000/example-app
+      sync:
+        manual:
+        - src: 'src/**/*.js'
+          dest: .
+  local: {}
+  insecureRegistries: 
+    - registry.local:5000
+deploy:
+  kustomize:
+    path: k8s/overlays/local
+portForward:
+  - resourceType: service
+    resourceName: example-app
+    namespace: default
+    port: 80
+    localPort: 3000
+profiles:
+  - name: local
+    activation:
+      - kubeContext: k3s-default
+        command: dev
