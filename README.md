@@ -2,9 +2,8 @@
 
 An example local k8s development environment using kustomize, skaffold and k3d.
 
-### TL;DR
 - Bootstraps k3s cluster using k3d
-- Creates a local insecure registry so Skaffold can build images using local Docker
+- Creates a local insecure registry in order that Skaffold can push images using local Docker as builder and k3s can pull the images
 - Kustomize uses [Directory Structure Based Layout](https://kubectl.docs.kubernetes.io/pages/app_composition_and_deployment/structure_directories.html)
 - Skaffold uses kustomize for building and deploying k8s manifests using [local](#kustomize-directory-structure-based-layout) overlay
 - An example `node.js` app will be bootstrapped with [File sync](https://skaffold.dev/docs/how-tos/filesync/) and [Port forward](https://skaffold.dev/docs/how-tos/portforward/) enabled
@@ -17,24 +16,24 @@ An example local k8s development environment using kustomize, skaffold and k3d.
 - k3d [installed](https://github.com/rancher/k3d)
 
 ### Usage
-Create k3s cluster using wrapper script:
+Create insecure registry and k3s cluster using wrapper script:
 ```sh
 $ ./k3d-create-cluster
 ```
-Make sure your kubectl config points to a correct context:
+Make sure your KUBECONFIG points to k3s cluster context (if not already):
 ```console
-$ kubectl config current-context
-k3s-local
+$ echo $KUBECONFIG
+/Users/<username>/.config/k3d/k3s-local/kubeconfig.yaml
 ```
 Start the local development environment:
 ```sh
-$ skaffold dev -p local --port-forward
+$ skaffold dev --port-forward
 ```
 An example node.js app is available at:
 ```sh
 localhost:3000
 ```
-Make some changes to `src/index.js` and they will synced to the pod(s) running the app.
+Make some changes to `src/index.js` and they will be synchronized to the pod(s) running the app.
 
 
 ## Kustomize Directory Structure Based Layout
