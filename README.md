@@ -17,7 +17,7 @@ An example local k8s development environment using kustomize, skaffold and k3d.
 - k3d [installed](https://github.com/rancher/k3d)
 
 ### Usage
-Create k3s cluster using k3d:
+Create k3s cluster using wrapper script:
 ```sh
 $ ./k3d-create-cluster
 ```
