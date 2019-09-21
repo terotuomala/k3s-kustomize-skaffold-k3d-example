@@ -8,26 +8,33 @@ COLOR_CYAN="\033[1;36m"
 COLOR_WHITE="\033[1;37m"
 NO_COLOR="\033[0m"
 
+echo -e ${COLOR_GREEN}
+echo -e "  _____ _____ _____  "
+echo -e " || k ||| 3 ||| s || "
+echo -e " ||___|||___|||___|| ${COLOR_YELLOW} Bootstrap k3s cluster including a local insecure registry with k3d. Version 1.0. ${COLOR_GREEN}"
+echo -e " |/___\|/___\|/___\| "
+echo -e ${NO_COLOR}
+
 main () {
     echo -e ${COLOR_WHITE}
-    read -p "Proceed creating a local insecure registry and install k3s cluster? [y/n] " answer
+    read -p "How many workers would you like to have? " WORKERS
     echo -e ${NO_COLOR}
-}
 
-if [ $answer = y ]; then
-  create_local_registry
-else
-  echo exiting..
-fi
+    if [ ${WORKERS} -eq 0 ]; then
+        echo "Cluster must have at least one worker.."
+    else
+        create_local_registry
+    fi
 }
 
 create_local_registry () {
     echo
     echo -e "${COLOR_CYAN}#######################################################################################################${NO_COLOR}"
     echo -e ${COLOR_WHITE}"Creating local insecure registry ${COLOR_GREEN}" ${NO_COLOR}
+    echo
 
     docker volume create local_registry
-    docker container run -d --name registry.local -v local_registry:/var/lib/registry --restart always -p 5000:5000 registry:2
+    docker container run -d --name registry.local -v local_registry:/var/lib/registry --restart unless-stopped -p 5000:5000 registry:2
 
     create_configuration
 }
@@ -35,24 +42,33 @@ create_local_registry () {
 create_configuration () {
     echo
     echo -e "${COLOR_CYAN}#######################################################################################################${NO_COLOR}"
-    echo -e ${COLOR_WHITE}"Creating configuration for the cluster ${COLOR_GREEN}" ${NO_COLOR}
+    echo -e ${COLOR_WHITE}"Copying configuration file for the cluster ${COLOR_GREEN}" ${NO_COLOR}
+    echo
 
     HOME_DIR=~/${USER}/.k3d
+    CONFIG_FILE=config.toml.tmpl
 
     mkdir -p ${HOME_DIR}
-    cp ./k3d/config.toml.tmpl ${HOME_DIR}
+    cp ./k3d/${CONFIG_FILE} ${HOME_DIR}
 
-    create_cluster
+    if [ -f ${HOME_DIR}/${CONFIG_FILE} ]; then
+        echo "Configuration file successfully copied to: ${HOME_DIR}/${CONFIG_FILE}"
+        create_cluster
+    else
+        echo "Could not copy configuration file to: ${HOME_DIR}"
+    fi
 }
 
 create_cluster () {
     echo
     echo -e "${COLOR_CYAN}#######################################################################################################${NO_COLOR}"
     echo -e ${COLOR_WHITE}"Creating the cluster ${COLOR_GREEN}" ${NO_COLOR}
+    echo
 
     CLUSTER_NAME=k3s-local
     k3d create \
     --name ${CLUSTER_NAME} \
+    --workers ${WORKERS} \
     --wait 0 \
     --auto-restart \
     --volume ${HOME_DIR}/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
@@ -64,6 +80,7 @@ connect_registry () {
     echo
     echo -e "${COLOR_CYAN}#######################################################################################################${NO_COLOR}"
     echo -e ${COLOR_WHITE}"Connecting the registry to the cluster network ${COLOR_GREEN}" ${NO_COLOR}
+    echo
 
     docker network connect k3d-${CLUSTER_NAME} registry.local
 
@@ -74,6 +91,7 @@ add_registry_to_hosts () {
     echo
     echo -e "${COLOR_CYAN}#######################################################################################################${NO_COLOR}"
     echo -e ${COLOR_WHITE}"Adding 127.0.0.1 registry.local to /etc/hosts ${COLOR_GREEN}" ${NO_COLOR}
+    echo
 
     echo "127.0.0.1 registry.local" >> /etc/hosts
 
