@@ -99,7 +99,7 @@ connect_registry () {
     echo -e ${COLOR_WHITE}"Connecting the registry to the cluster network ${COLOR_GREEN}" ${NO_COLOR}
     echo
 
-    docker network connect k3d-${CLUSTER_NAME} registry.local
+    docker network connect k3d-${CLUSTER_NAME} ${REGISTRY_NAME}
 
     add_registry_to_hosts
 }
