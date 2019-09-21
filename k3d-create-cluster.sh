@@ -20,10 +20,10 @@ main () {
     read -p "How many workers would you like to have? " WORKERS
     echo -e ${NO_COLOR}
 
-    if [ ${WORKERS} -eq 0 ]; then
-        echo "Cluster must have at least one worker.."
-    else
+    if [ ! ${WORKERS} -eq 0 ]; then
         create_local_registry
+    else
+        echo "Cluster must have at least one worker.."
     fi
 }
 
@@ -33,10 +33,27 @@ create_local_registry () {
     echo -e ${COLOR_WHITE}"Creating local insecure registry ${COLOR_GREEN}" ${NO_COLOR}
     echo
 
-    docker volume create local_registry
-    docker container run -d --name registry.local -v local_registry:/var/lib/registry --restart unless-stopped -p 5000:5000 registry:2
+    REGISTRY_NAME=registry.local
+    VOLUME_NAME=local_registry
 
-    create_configuration
+    if [ ! "$(docker ps -aq -f name=${REGISTRY_NAME})" ]; then
+        if [ ! "$(docker volume ls -q -f name=${VOLUME_NAME})"]; then
+            echo -e ${COLOR_WHITE}
+            read -p "Insecure registry already running, re-create the registy? [y/n] " CREATE_REGISTRY
+            echo -e ${NO_COLOR}
+
+            if [ ! ${CREATE_REGISTRY = y} ]; then
+                create_configuration
+            else
+                docker rm -f ${REGISTRY_NAME}
+                docker volume rm ${VOLUME_NAME}
+
+                docker volume create ${VOLUME_NAME}
+                docker container run -d --name ${REGISTRY_NAME} -v ${VOLUME_NAME}:/var/lib/registry --restart unless-stopped -p 5000:5000 registry:2
+            fi
+        fi
+            create_configuration
+    fi
 }
 
 create_configuration () {
@@ -51,11 +68,11 @@ create_configuration () {
     mkdir -p ${HOME_DIR}
     cp ./k3d/${CONFIG_FILE} ${HOME_DIR}
 
-    if [ -f ${HOME_DIR}/${CONFIG_FILE} ]; then
+    if [ ! -f ${HOME_DIR}/${CONFIG_FILE} ]; then
+        echo "Could not copy configuration file to: ${HOME_DIR}"
+    else
         echo "Configuration file successfully copied to: ${HOME_DIR}/${CONFIG_FILE}"
         create_cluster
-    else
-        echo "Could not copy configuration file to: ${HOME_DIR}"
     fi
 }
 
