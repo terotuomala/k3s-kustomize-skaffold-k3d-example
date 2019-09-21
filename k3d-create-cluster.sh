@@ -18,31 +18,39 @@ echo -e ${NO_COLOR}
 main () {
     echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
-    echo -e ${COLOR_WHITE}"Creating local insecure registry ${COLOR_GREEN}" ${NO_COLOR}
-    echo
+    echo -e ${COLOR_WHITE}"Checking if the local insecure registry already exists ${COLOR_GREEN}" ${NO_COLOR}
 
     REGISTRY_NAME=registry.local
     VOLUME_NAME=local_registry
 
     if [ ! "$(docker ps -aq -f name=${REGISTRY_NAME} && docker volume ls -q -f name=${VOLUME_NAME})" ]; then
-        create_configuration
+        create_registry
     else
         echo -e ${COLOR_WHITE}
         read -p "Insecure registry already exists, re-create the registy? [y/n] " RE_CREATE_REGISTRY
         echo -e ${NO_COLOR}
 
         if [ ! ${RE_CREATE_REGISTRY} = y ]; then
-            create_configuration
+            create_registry
         else
             docker rm -f ${REGISTRY_NAME}
             docker volume rm ${VOLUME_NAME}
 
-            docker volume create ${VOLUME_NAME}
-            docker container run -d --name ${REGISTRY_NAME} -v ${VOLUME_NAME}:/var/lib/registry --restart unless-stopped -p 5000:5000 registry:2
-
-            create_configuration
+            create_registry
         fi
     fi
+}
+
+create_registry () {
+    echo
+    echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
+    echo -e ${COLOR_WHITE}"Creating local insecure registry ${COLOR_GREEN}" ${NO_COLOR}
+    echo
+
+    docker volume create ${VOLUME_NAME}
+    docker container run -d --name ${REGISTRY_NAME} -v ${VOLUME_NAME}:/var/lib/registry --restart unless-stopped -p 5000:5000 registry:2
+
+    create_configuration
 }
 
 create_configuration () {
