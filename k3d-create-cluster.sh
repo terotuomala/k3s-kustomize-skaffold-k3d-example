@@ -31,7 +31,7 @@ main () {
         echo -e ${NO_COLOR}
 
         if [ ! ${RE_CREATE_REGISTRY} = y ]; then
-            create_registry
+            create_configuration
         else
             docker rm -f ${REGISTRY_NAME}
             docker volume rm ${VOLUME_NAME}
@@ -74,6 +74,7 @@ create_configuration () {
 }
 
 check_cluster () {
+    echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
     echo -e ${COLOR_WHITE}"Checking if the cluster already exists ${COLOR_GREEN}" ${NO_COLOR}
     
@@ -116,6 +117,7 @@ create_cluster () {
         connect_registry
     else
         echo "Cluster must have at least one worker.."
+        create_cluster
     fi
 }
 
@@ -125,11 +127,19 @@ connect_registry () {
     echo -e ${COLOR_WHITE}"Connecting the registry to the cluster network ${COLOR_GREEN}" ${NO_COLOR}
     echo
 
-    if [ ! "$(docker network ls -q -f name=k3d-${CLUSTER_NAME})" ]; then
-        docker network connect k3d-${CLUSTER_NAME} ${REGISTRY_NAME}
+    NETWORK_NAME=k3d-${CLUSTER_NAME}
+
+    if [ ! "$(docker network ls -q -f name=${NETWORK_NAME})" ]; then
+        docker network create ${NETWORK_NAME}
+        docker network connect ${NETWORK_NAME} ${REGISTRY_NAME}
         add_registry_to_hosts
+
+    elif [ ! "$(docker network inspect ${NETWORK_NAME} | grep -o ${REGISTRY_NAME})" ]; then
+        docker network connect ${NETWORK_NAME} ${REGISTRY_NAME}
+        add_registry_to_hosts
+
     else
-        echo "Registry already connected to cluster network"
+        #docker network disconnect ${NETWORK_NAME} ${REGISTRY_NAME}
         add_registry_to_hosts
     fi
 }
@@ -155,9 +165,9 @@ add_registry_to_hosts () {
 post_information () {
     echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
-    echo -e "${COLOR_WHITE}In order to connect k3s cluster using kubectl, please point your KUBECONFIG to k3s context using command:${NO_COLOR}"
+    echo -e "${COLOR_WHITE}In order to connect k3s cluster using kubectl, please change your KUBECONFIG to k3s context using command:${NO_COLOR}"
     echo
-    echo -e "${COLOR_WHITE}export KUBECONFIG=$(k3d get-kubeconfig --name=${CLUSTER_NAME})${NO_COLOR}"
+    echo -e "${COLOR_GREEN}export KUBECONFIG=$(k3d get-kubeconfig --name=${CLUSTER_NAME})${NO_COLOR}"
     echo
 }
 
