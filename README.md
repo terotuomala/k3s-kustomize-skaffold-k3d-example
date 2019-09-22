@@ -4,6 +4,8 @@ An example local [k3s](https://github.com/rancher/k3s) development environment u
 
 **NB.** The setup is tested on `macOS Mojave`.
 
+![](./flow.gif)
+
 ### Features
 - Bootstraps k3s cluster using k3d
 - Creates a local insecure registry in order that Skaffold can push images using local Docker as builder and k3s can pull the images
@@ -19,12 +21,12 @@ An example local [k3s](https://github.com/rancher/k3s) development environment u
 - k3d [installed](https://github.com/rancher/k3d)
 
 ### Usage
-Create insecure registry and k3s cluster using wrapper script:
+Create insecure registry, k3s cluster and wire them up using wrapper script:
 ```sh
 $ ./k3d-create-cluster
 ```
 Make sure your KUBECONFIG points to k3s cluster context (if not already):
-```console
+```sh
 $ echo $KUBECONFIG
 /Users/<username>/.config/k3d/k3s-local/kubeconfig.yaml
 ```
@@ -44,7 +46,6 @@ Make some changes to `src/index.js` and they will be synchronized to the pod(s) 
 ├── base
 │   ├── deployment.yaml
 │   ├── hpa.yaml
-│   ├── ingress.yaml
 │   ├── kustomization.yaml
 │   └── service.yaml
 └── overlays
