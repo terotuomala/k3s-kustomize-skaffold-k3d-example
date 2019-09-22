@@ -4,6 +4,7 @@ An example local [k3s](https://github.com/rancher/k3s) development environment u
 
 **NB.** The setup is tested on `macOS Mojave`.
 
+### Features
 - Bootstraps k3s cluster using k3d
 - Creates a local insecure registry in order that Skaffold can push images using local Docker as builder and k3s can pull the images
 - Kustomize uses [Directory Structure Based Layout](https://kubectl.docs.kubernetes.io/pages/app_composition_and_deployment/structure_directories.html)
