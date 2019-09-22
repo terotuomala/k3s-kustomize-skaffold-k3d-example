@@ -1,6 +1,8 @@
-# k8s-kustomize-skaffold-k3d-example
+# k3s-kustomize-skaffold-k3d-example
 
-An example local k8s development environment using kustomize, skaffold and k3d.
+An example local [k3s](https://github.com/rancher/k3s) development environment using [kustomize](https://github.com/kubernetes-sigs/kustomize), [skaffold](https://github.com/GoogleContainerTools/skaffold) and [k3d](https://github.com/rancher/k3d). 
+
+**NB.** The setup is tested on `macOS Mojave`.
 
 - Bootstraps k3s cluster using k3d
 - Creates a local insecure registry in order that Skaffold can push images using local Docker as builder and k3s can pull the images
