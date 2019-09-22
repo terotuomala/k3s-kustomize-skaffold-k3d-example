@@ -11,7 +11,7 @@ NO_COLOR="\033[0m"
 echo -e ${COLOR_GREEN}
 echo -e "  _____ _____ _____  "
 echo -e " || k ||| 3 ||| s || "
-echo -e " ||___|||___|||___|| ${COLOR_YELLOW} Bootstrap k3s cluster including a local insecure registry with k3d. Version 1.0. ${COLOR_GREEN}"
+echo -e " ||___|||___|||___|| ${COLOR_YELLOW} Bootstrap k3s cluster with k3d including a local insecure registry. Version 1.0. ${COLOR_GREEN}"
 echo -e " |/___\|/___\|/___\| "
 echo -e ${NO_COLOR}
 
@@ -24,6 +24,8 @@ main () {
     VOLUME_NAME=local_registry
 
     if [ ! "$(docker ps -aq -f name=${REGISTRY_NAME} && docker volume ls -q -f name=${VOLUME_NAME})" ]; then
+        echo
+        echo "No insecure registries found, creating one"
         create_registry
     else
         echo -e ${COLOR_WHITE}
