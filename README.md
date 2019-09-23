@@ -4,7 +4,7 @@ An example local [k3s](https://github.com/rancher/k3s) development environment u
 
 **NB.** The setup is tested on `macOS Mojave`.
 
-![](./flow.gif)
+<p align="center"><img src="./flow.gif?raw=true"/></p>
 
 ### Features
 - Bootstraps k3s cluster using k3d
