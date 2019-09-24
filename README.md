@@ -2,7 +2,7 @@
 
 An example local [k3s](https://github.com/rancher/k3s) development environment using [kustomize](https://github.com/kubernetes-sigs/kustomize), [skaffold](https://github.com/GoogleContainerTools/skaffold) and [k3d](https://github.com/rancher/k3d). 
 
-<p align="center"><img src="./create-cluster-flow.gif?raw=true"/></p>
+<p align="center"><img src="./k3d-create-cluster-flow.gif?raw=true"/></p>
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
