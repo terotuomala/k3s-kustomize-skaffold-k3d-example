@@ -10,17 +10,21 @@ build:
   local: {}
   insecureRegistries: 
     - registry.local:5000
-deploy:
-  kustomize:
-    path: k8s/overlays/local
+
+profiles:
+  - name: local
+    deploy:
+    kustomize:
+      path: k8s/overlays/local
+
+  - name: test
+    deploy:
+    kustomize:
+      path: k8s/overlays/test
+
 portForward:
   - resourceType: service
     resourceName: example-app
     namespace: default
     port: 80
     localPort: 3000
-profiles:
-  - name: local
-    activation:
-      - kubeContext: k3s-local
-        command: dev
