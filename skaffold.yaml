@@ -14,13 +14,13 @@ build:
 profiles:
   - name: local
     deploy:
-    kustomize:
-      path: k8s/overlays/local
+      kustomize:
+        path: k8s/overlays/local
 
   - name: test
     deploy:
-    kustomize:
-      path: k8s/overlays/test
+      kustomize:
+        path: k8s/overlays/test
 
 portForward:
   - resourceType: service
