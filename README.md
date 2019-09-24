@@ -2,25 +2,57 @@
 
 An example local [k3s](https://github.com/rancher/k3s) development environment using [kustomize](https://github.com/kubernetes-sigs/kustomize), [skaffold](https://github.com/GoogleContainerTools/skaffold) and [k3d](https://github.com/rancher/k3d). 
 
-**NB.** The setup is tested on `macOS Mojave`.
-
 <p align="center"><img src="./create-cluster-flow.gif?raw=true"/></p>
 
-### Features
-- Bootstraps k3s cluster using k3d
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+
+* [Features](#features)
+* [Prerequisites](#prerequisites)
+* [Usage](#usage)
+
+
+<!-- FEATURES -->
+## Features
+- Bootstraps k3s cluster in Docker using k3d
 - Creates a local insecure registry in order that Skaffold can push images using local Docker as builder and k3s can pull the images
 - Kustomize uses [Directory Structure Based Layout](https://kubectl.docs.kubernetes.io/pages/app_composition_and_deployment/structure_directories.html)
 - Skaffold uses kustomize for building and deploying k8s manifests using [local](#kustomize-directory-structure-based-layout) overlay
 - An example `node.js` app will be bootstrapped with [File sync](https://skaffold.dev/docs/how-tos/filesync/) and [Port forward](https://skaffold.dev/docs/how-tos/portforward/) enabled
 
-### Prerequisites
-- Docker Desktop [installed](https://docs.docker.com/install/)
-- kubectl [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- kustomize [installed](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/INSTALL.md)
-- Skaffold [installed](https://skaffold.dev/docs/getting-started/#installing-skaffold)
-- k3d [installed](https://github.com/rancher/k3d)
+<!-- PREREQUISITES -->
+## Prerequisites
+**NB.** The setup is tested on `macOS Mojave`.
 
-### Usage
+Docker Desktop [installed](https://docs.docker.com/install/)
+```sh
+# If you don't want to sign up in order to download Docker
+# use the following command to download the installer directly
+$ curl -s https://download.docker.com/mac/stable/Docker.dmg
+```
+
+kubectl [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+```sh
+$ brew install kubernetes-cli
+```
+
+kustomize (at least version 2.0.3) [installed](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/INSTALL.md)
+```sh
+brew install kustomize
+```
+
+Skaffold (at least version v0.38.0) [installed](https://skaffold.dev/docs/getting-started/#installing-skaffold)
+```sh
+$ brew install skaffold
+```
+
+k3d (at least version v1.3.1) [installed](https://github.com/rancher/k3d)
+```sh
+$ curl -s https://raw.githubusercontent.com/rancher/k3d/master/install.sh | bash
+```
+
+<!-- USAGE -->
+## Usage
 Create insecure registry, k3s cluster and wire them up using wrapper script:
 ```sh
 $ ./k3d-create-cluster
