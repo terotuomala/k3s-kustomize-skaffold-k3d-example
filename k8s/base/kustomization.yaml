@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
 - deployment.yaml
 - hpa.yaml
-- ingress.yaml
 - service.yaml
 
 commonLabels:
