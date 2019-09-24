@@ -10,6 +10,7 @@ An example local [k3s](https://github.com/rancher/k3s) development environment u
 * [Features](#features)
 * [Prerequisites](#prerequisites)
 * [Usage](#usage)
+* [Kustomize configuration](#kustomize-configuration)
 
 
 <!-- FEATURES -->
@@ -72,8 +73,10 @@ localhost:3000
 ```
 Make some changes to `src/index.js` and they will be synchronized to the pod(s) running the app.
 
+<!-- KUSTOMIZE CONFIGURATION -->
+## Kustomize configuration
 
-## Kustomize Directory Structure Based Layout
+Directory Structure Based Layout
 ```sh
 ├── base
 │   ├── deployment.yaml
@@ -85,11 +88,7 @@ Make some changes to `src/index.js` and they will be synchronized to the pod(s) 
     │   ├── deployment-patch.yaml
     │   ├── hpa-patch.yaml
     │   ├── kustomization.yaml
-    ├── production
-    │   ├── deployment-patch.yaml
-    │   ├── hpa-patch.yaml
-    │   ├── kustomization.yaml
-    └── staging
+    └── test
         ├── deployment-patch.yaml
         ├── hpa-patch.yaml
         ├── kustomization.yaml
