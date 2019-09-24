@@ -1,0 +1,7 @@
+- op: add
+  path: /spec/minReplicas
+  value: 3
+
+- op: add
+  path: /spec/maxReplicas
+  value: 7
