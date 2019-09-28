@@ -18,6 +18,33 @@ echo -e ${NO_COLOR}
 main () {
     echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
+    echo -e ${COLOR_WHITE}"Checking prerequisites ${COLOR_GREEN}" ${NO_COLOR}
+    echo
+
+    command -v docker > /dev/null 2>&1 || { \
+        echo >&2 "Docker is required but it's not installed. Aborting."; exit 1; }
+    
+    docker info > /dev/null 2>&1 || { \
+        echo >&2 "Docker is not running. Aborting"; exit 1; }
+    
+    command -v kubectl > /dev/null 2>&1 || { \
+        echo >&2 "kubectl is required but it's not installed. Aborting."; exit 1; }
+    
+    command -v kustomize > /dev/null 2>&1 || { \
+        echo >&2 "kustomize is required but it's not installed. Aborting."; exit 1; }
+
+    command -v skaffold > /dev/null 2>&1 || { \
+        echo >&2 "Skaffold is required but it's not installed. Aborting."; exit 1; }
+
+    command -v k3d > /dev/null 2>&1 || { \
+        echo >&2 "k3d is required but it's not installed. Aborting."; exit 1; }
+
+    check_registry
+}
+
+check_registry () {
+    echo
+    echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
     echo -e ${COLOR_WHITE}"Checking if the local insecure registry already exists ${COLOR_GREEN}" ${NO_COLOR}
 
     REGISTRY_NAME=registry.local
