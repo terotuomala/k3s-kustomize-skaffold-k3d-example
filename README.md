@@ -48,7 +48,7 @@ $ brew install skaffold
 
 k3d (at least version v1.3.1) [installed](https://github.com/rancher/k3d)
 ```sh
-$ curl -s https://raw.githubusercontent.com/rancher/k3d/master/install.sh | bash
+$ brew install k3d
 ```
 
 <!-- USAGE -->
