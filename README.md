@@ -22,7 +22,7 @@ An example local [k3s](https://github.com/rancher/k3s) development environment u
 
 <!-- PREREQUISITES -->
 ## Prerequisites
-**NB.** The setup is tested on `macOS Mojave`.
+**NB.** The setup is tested on `macOS Catalina`.
 
 Docker Desktop [installed](https://docs.docker.com/install/)
 ```sh
@@ -59,8 +59,7 @@ $ ./k3d-create-cluster
 ```
 Make sure your KUBECONFIG points to k3s cluster context (if not already):
 ```sh
-$ echo $KUBECONFIG
-/Users/<username>/.config/k3d/k3s-local/kubeconfig.yaml
+$ kubectl get nodes
 ```
 Start the local development environment:
 ```sh
