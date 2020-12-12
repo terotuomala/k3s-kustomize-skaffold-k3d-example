@@ -192,9 +192,9 @@ add_registry_to_hosts () {
 post_information () {
     echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
-    echo -e "${COLOR_WHITE}Test connection to k3s cluster using command:${NO_COLOR}"
+    echo -e "${COLOR_WHITE}Test connection to the k3s cluster using command:${NO_COLOR}"
     echo
-    echo -e "${COLOR_GREEN}kubectl get nodes ${CLUSTER_NAME})${NO_COLOR}"
+    echo -e "${COLOR_GREEN}kubectl get nodes${NO_COLOR}"
     echo
 }
 
