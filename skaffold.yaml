@@ -1,4 +1,4 @@
-apiVersion: skaffold/v1beta14
+apiVersion: skaffold/v2beta9
 kind: Config
 build:
   artifacts:
@@ -16,6 +16,7 @@ profiles:
     deploy:
       kustomize:
         path: k8s/overlays/local
+      kubeContext: k3s-local
 
   - name: test
     deploy:
