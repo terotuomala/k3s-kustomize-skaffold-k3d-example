@@ -109,7 +109,7 @@ check_cluster () {
     
     CLUSTER_NAME=k3s-local
 
-    if [ ! "$(k3d list | grep -o ${CLUSTER_NAME})" ]; then
+    if [ ! "$(k3d cluster list | grep -o ${CLUSTER_NAME})" ]; then
         create_cluster
     else
         echo -e ${COLOR_WHITE}
@@ -119,7 +119,7 @@ check_cluster () {
         if [ ! ${RE_CREATE_CLUSTER} = y ]; then
             connect_registry
         else
-            k3d delete -n ${CLUSTER_NAME}
+            k3d cluster delete -n ${CLUSTER_NAME}
             create_cluster
         fi
     fi
