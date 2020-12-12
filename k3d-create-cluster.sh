@@ -85,7 +85,7 @@ create_registry () {
 create_configuration () {
     echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
-    echo -e ${COLOR_WHITE}"Copying configuration file for the cluster ${COLOR_GREEN}" ${NO_COLOR}
+    echo -e ${COLOR_WHITE}"Copying registry configuration file for the cluster ${COLOR_GREEN}" ${NO_COLOR}
     echo
 
     HOME_DIR=~/${USER}/.k3d
@@ -95,9 +95,9 @@ create_configuration () {
     cp ./k3d/${CONFIG_FILE} ${HOME_DIR}
 
     if [ ! -f ${HOME_DIR}/${CONFIG_FILE} ]; then
-        echo "Could not copy configuration file to: ${HOME_DIR}"
+        echo "Could not copy registry configuration file to: ${HOME_DIR}"
     else
-        echo "Configuration file successfully copied to: ${HOME_DIR}/${CONFIG_FILE}"
+        echo "Registry configuration file successfully copied to: ${HOME_DIR}/${CONFIG_FILE}"
         check_cluster
     fi
 }
@@ -126,6 +126,7 @@ check_cluster () {
 }
 
 create_cluster () {
+    echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
     echo -e ${COLOR_WHITE}
     read -p "How many agents would you like to have? " AGENTS
     echo -e ${NO_COLOR}
@@ -137,9 +138,9 @@ create_cluster () {
         echo
 
         k3d cluster create ${CLUSTER_NAME} \ 
-        --agents ${AGENTS}
+        --agents ${AGENTS} \
+        --volume ${HOME_DIR}/${CONFIG_FILE}:/etc/rancher/k3s/registries.yml \
         --wait
-        --volume ${HOME_DIR}/${CONFIG_FILE}:/etc/rancher/k3s/registries.yml
             
         connect_registry
     else
