@@ -56,7 +56,7 @@ check_registry () {
         create_registry
     else
         echo -e ${COLOR_WHITE}
-        read -p "Insecure registry already exists, re-create the registy? [y/n] " RE_CREATE_REGISTRY
+        read -p "Insecure registry already exists. Proceed deleting the registry and create new one? [y/n] " RE_CREATE_REGISTRY
         echo -e ${NO_COLOR}
 
         if [ ! ${RE_CREATE_REGISTRY} = y ]; then
@@ -85,19 +85,19 @@ create_registry () {
 create_configuration () {
     echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
-    echo -e ${COLOR_WHITE}"Copying configuration file for the cluster ${COLOR_GREEN}" ${NO_COLOR}
+    echo -e ${COLOR_WHITE}"Copying registry configuration file for the cluster ${COLOR_GREEN}" ${NO_COLOR}
     echo
 
     HOME_DIR=~/${USER}/.k3d
-    CONFIG_FILE=config.toml.tmpl
+    CONFIG_FILE=registries.yml
 
     mkdir -p ${HOME_DIR}
     cp ./k3d/${CONFIG_FILE} ${HOME_DIR}
 
     if [ ! -f ${HOME_DIR}/${CONFIG_FILE} ]; then
-        echo "Could not copy configuration file to: ${HOME_DIR}"
+        echo "Could not copy registry configuration file to: ${HOME_DIR}"
     else
-        echo "Configuration file successfully copied to: ${HOME_DIR}/${CONFIG_FILE}"
+        echo "Registry configuration file successfully copied to: ${HOME_DIR}/${CONFIG_FILE}"
         check_cluster
     fi
 }
@@ -109,43 +109,41 @@ check_cluster () {
     
     CLUSTER_NAME=k3s-local
 
-    if [ ! "$(k3d list | grep -o ${CLUSTER_NAME})" ]; then
+    if [ ! "$(k3d cluster list | grep -o ${CLUSTER_NAME})" ]; then
         create_cluster
     else
+        echo
         echo -e ${COLOR_WHITE}
-        read -p "Cluster with name ${CLUSTER_NAME} already exists, re-create it? [y/n] " RE_CREATE_CLUSTER
+        read -p "Cluster with name ${CLUSTER_NAME} already exists. Proceed deleting the cluster and create new one? [y/n] " RE_CREATE_CLUSTER
         echo -e ${NO_COLOR}
 
         if [ ! ${RE_CREATE_CLUSTER} = y ]; then
             connect_registry
         else
-            k3d delete -n ${CLUSTER_NAME}
+            k3d cluster delete ${CLUSTER_NAME}
             create_cluster
         fi
     fi
 }
 
 create_cluster () {
+    echo
+    echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
     echo -e ${COLOR_WHITE}
-    read -p "How many workers would you like to have? " WORKERS
+    read -p "How many agents would you like to have? " AGENTS
     echo -e ${NO_COLOR}
 
-    if [ ! ${WORKERS} -eq 0 ]; then
+    if [ ! ${AGENTS} -eq 0 ]; then
         echo
         echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
         echo -e ${COLOR_WHITE}"Creating the cluster ${COLOR_GREEN}" ${NO_COLOR}
         echo
 
-        k3d create \
-        --name ${CLUSTER_NAME} \
-        --workers ${WORKERS} \
-        --wait 0 \
-        --auto-restart \
-        --volume ${HOME_DIR}/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+        k3d cluster create ${CLUSTER_NAME} --agents ${AGENTS} --volume "${HOME_DIR}/${CONFIG_FILE}:/etc/rancher/k3s/registries.yml" --update-default-kubeconfig
             
         connect_registry
     else
-        echo "Cluster must have at least one worker.."
+        echo "Cluster must have at least one agent.."
         create_cluster
     fi
 }
@@ -194,9 +192,9 @@ add_registry_to_hosts () {
 post_information () {
     echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
-    echo -e "${COLOR_WHITE}In order to connect k3s cluster using kubectl, please change your KUBECONFIG to k3s context using command:${NO_COLOR}"
+    echo -e "${COLOR_WHITE}Test connection to the k3s cluster using command:${NO_COLOR}"
     echo
-    echo -e "${COLOR_GREEN}export KUBECONFIG=$(k3d get-kubeconfig --name=${CLUSTER_NAME})${NO_COLOR}"
+    echo -e "${COLOR_GREEN}kubectl get nodes${NO_COLOR}"
     echo
 }
 

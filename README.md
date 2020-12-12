@@ -22,7 +22,7 @@ An example local [k3s](https://github.com/rancher/k3s) development environment u
 
 <!-- PREREQUISITES -->
 ## Prerequisites
-**NB.** The setup is tested on `macOS Mojave`.
+**NB.** The setup is tested on `macOS Catalina`.
 
 Docker Desktop [installed](https://docs.docker.com/install/)
 ```sh
@@ -46,7 +46,7 @@ Skaffold (at least version v0.38.0) [installed](https://skaffold.dev/docs/gettin
 $ brew install skaffold
 ```
 
-k3d (at least version v1.3.1) [installed](https://github.com/rancher/k3d)
+k3d (at least version v3.0.0) [installed](https://github.com/rancher/k3d)
 ```sh
 $ brew install k3d
 ```
@@ -59,8 +59,7 @@ $ ./k3d-create-cluster
 ```
 Make sure your KUBECONFIG points to k3s cluster context (if not already):
 ```sh
-$ echo $KUBECONFIG
-/Users/<username>/.config/k3d/k3s-local/kubeconfig.yaml
+$ kubectl get nodes
 ```
 Start the local development environment:
 ```sh
@@ -89,5 +88,5 @@ Kustomize configuration is based on [Directory Structure Based Layout](https://k
     └── test
         ├── deployment-patch.yaml
         ├── hpa-patch.yaml
-        ├── kustomization.yaml
+        └── kustomization.yaml
 ```

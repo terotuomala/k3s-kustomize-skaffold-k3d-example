@@ -25,7 +25,7 @@ spec:
           image: example-app:latest
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c"]
-          args: ["yarn start"]
+          args: ["node src/index.js"]
           resources:
             limits:
               cpu: 50m

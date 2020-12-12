@@ -1,15 +1,15 @@
-FROM node:12-alpine as build
+FROM node:14-alpine as build
 
 # Change working directory
 WORKDIR /app
 
-COPY package.json ./
+COPY package*.json ./
+
+RUN npm install
 
 COPY src ./src
 
-RUN yarn
-
-FROM node:12-alpine as release
+FROM node:14-alpine as release
 
 # Switch to user node
 USER node
