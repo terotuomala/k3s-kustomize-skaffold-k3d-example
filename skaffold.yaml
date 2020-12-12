@@ -19,7 +19,7 @@ profiles:
       kustomize:
         paths: 
           - k8s/overlays/local
-      kubeContext: k3s-local
+      kubeContext: k3d-k3s-local
 
   - name: test
     deploy:
