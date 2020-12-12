@@ -114,13 +114,13 @@ check_cluster () {
     else
         echo
         echo -e ${COLOR_WHITE}
-        read -p "Cluster with name ${CLUSTER_NAME} already exists, re-create it? [y/n] " RE_CREATE_CLUSTER
+        read -p "Cluster with name ${CLUSTER_NAME} already exists. Proceed deleting the cluster and create new one? [y/n] " RE_CREATE_CLUSTER
         echo -e ${NO_COLOR}
 
         if [ ! ${RE_CREATE_CLUSTER} = y ]; then
             connect_registry
         else
-            k3d cluster delete -n ${CLUSTER_NAME}
+            k3d cluster delete ${CLUSTER_NAME}
             create_cluster
         fi
     fi
