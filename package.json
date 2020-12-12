@@ -11,6 +11,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "nodemon": "^1.19.2"
+    "nodemon": "^2.0.6"
   }
 }
