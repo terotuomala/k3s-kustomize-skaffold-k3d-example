@@ -112,6 +112,7 @@ check_cluster () {
     if [ ! "$(k3d cluster list | grep -o ${CLUSTER_NAME})" ]; then
         create_cluster
     else
+        echo
         echo -e ${COLOR_WHITE}
         read -p "Cluster with name ${CLUSTER_NAME} already exists, re-create it? [y/n] " RE_CREATE_CLUSTER
         echo -e ${NO_COLOR}
@@ -126,6 +127,7 @@ check_cluster () {
 }
 
 create_cluster () {
+    echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
     echo -e ${COLOR_WHITE}
     read -p "How many agents would you like to have? " AGENTS
@@ -137,14 +139,11 @@ create_cluster () {
         echo -e ${COLOR_WHITE}"Creating the cluster ${COLOR_GREEN}" ${NO_COLOR}
         echo
 
-        k3d cluster create ${CLUSTER_NAME} \ 
-        --agents ${AGENTS} \
-        --volume ${HOME_DIR}/${CONFIG_FILE}:/etc/rancher/k3s/registries.yml \
-        --wait
+        k3d cluster create ${CLUSTER_NAME} --agents ${AGENTS} --volume "${HOME_DIR}/${CONFIG_FILE}:/etc/rancher/k3s/registries.yml" --update-default-kubeconfig
             
         connect_registry
     else
-        echo "Cluster must have at least one worker.."
+        echo "Cluster must have at least one agent.."
         create_cluster
     fi
 }
@@ -193,9 +192,9 @@ add_registry_to_hosts () {
 post_information () {
     echo
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
-    echo -e "${COLOR_WHITE}In order to connect k3s cluster using kubectl, please change your KUBECONFIG to k3s context using command:${NO_COLOR}"
+    echo -e "${COLOR_WHITE}Test connection to k3s cluster using command:${NO_COLOR}"
     echo
-    echo -e "${COLOR_GREEN}export KUBECONFIG=$(k3d kubeconfig write ${CLUSTER_NAME})${NO_COLOR}"
+    echo -e "${COLOR_GREEN}kubectl get nodes ${CLUSTER_NAME})${NO_COLOR}"
     echo
 }
 
