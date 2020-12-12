@@ -1,5 +1,7 @@
 apiVersion: skaffold/v2beta9
 kind: Config
+metadata:
+  name: example-app
 build:
   artifacts:
     - image: registry.local:5000/example-app
@@ -15,17 +17,19 @@ profiles:
   - name: local
     deploy:
       kustomize:
-        path: k8s/overlays/local
+        paths: 
+          - k8s/overlays/local
       kubeContext: k3s-local
 
   - name: test
     deploy:
       kustomize:
-        path: k8s/overlays/test
+        paths: 
+          - k8s/overlays/test
 
 portForward:
   - resourceType: service
     resourceName: example-app
     namespace: default
-    port: 80
+    port: 3000
     localPort: 3000
