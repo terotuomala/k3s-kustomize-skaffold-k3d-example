@@ -56,7 +56,7 @@ check_registry () {
         create_registry
     else
         echo -e ${COLOR_WHITE}
-        read -p "Insecure registry already exists, re-create the registy? [y/n] " RE_CREATE_REGISTRY
+        read -p "Insecure registry already exists. Proceed deleting the registry and create new one? [y/n] " RE_CREATE_REGISTRY
         echo -e ${NO_COLOR}
 
         if [ ! ${RE_CREATE_REGISTRY} = y ]; then
@@ -89,7 +89,7 @@ create_configuration () {
     echo
 
     HOME_DIR=~/${USER}/.k3d
-    CONFIG_FILE=config.toml.tmpl
+    CONFIG_FILE=registries.yml
 
     mkdir -p ${HOME_DIR}
     cp ./k3d/${CONFIG_FILE} ${HOME_DIR}
@@ -127,21 +127,19 @@ check_cluster () {
 
 create_cluster () {
     echo -e ${COLOR_WHITE}
-    read -p "How many workers would you like to have? " WORKERS
+    read -p "How many agents would you like to have? " AGENTS
     echo -e ${NO_COLOR}
 
-    if [ ! ${WORKERS} -eq 0 ]; then
+    if [ ! ${AGENTS} -eq 0 ]; then
         echo
         echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
         echo -e ${COLOR_WHITE}"Creating the cluster ${COLOR_GREEN}" ${NO_COLOR}
         echo
 
-        k3d create \
-        --name ${CLUSTER_NAME} \
-        --workers ${WORKERS} \
-        --wait 0 \
-        --auto-restart \
-        --volume ${HOME_DIR}/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+        k3d cluster create ${CLUSTER_NAME} \ 
+        --agents ${AGENTS}
+        --wait
+        --volume ${HOME_DIR}/${CONFIG_FILE}:/etc/rancher/k3s/registries.yml
             
         connect_registry
     else
@@ -196,7 +194,7 @@ post_information () {
     echo -e "${COLOR_CYAN}###################################################################################################################${NO_COLOR}"
     echo -e "${COLOR_WHITE}In order to connect k3s cluster using kubectl, please change your KUBECONFIG to k3s context using command:${NO_COLOR}"
     echo
-    echo -e "${COLOR_GREEN}export KUBECONFIG=$(k3d get-kubeconfig --name=${CLUSTER_NAME})${NO_COLOR}"
+    echo -e "${COLOR_GREEN}export KUBECONFIG=$(k3d kubeconfig write ${CLUSTER_NAME})${NO_COLOR}"
     echo
 }
 
