@@ -1,46 +1,42 @@
 {
-    "enabled": true,
-    "timezone": "Europe/Helsinki",
-    "dependencyDashboard": true,
-    "dependencyDashboardTitle": "Renovate Dashboard",
-    "commitMessageSuffix": "[ci-skip]",
-    "commitBody": "Signed-off-by: Tero",
-    // do not notify on closed, unmerged PRs
-    "suppressNotifications": ["prIgnoreNotification"],
-    // do not rebase PRs
-    "rebaseWhen": "conflicted",
-    "assignees": ["@terotuomala"],
-    "packageRules": [
-      // labels
-      {
-        "datasources": ["docker"],
-        "updateTypes": ["major"],
-        "labels": ["renovate/image-release", "dependency/major"]
-      },
-      {
-        "datasources": ["docker"],
-        "updateTypes": ["minor"],
-        "labels": ["renovate/image-release", "dependency/minor"]
-      },
-      {
-        "datasources": ["docker"],
-        "updateTypes": ["patch"],
-        "labels": ["renovate/image-release", "dependency/patch"]
-      },
-      // auto-updates
-      {
-        "datasources": ["docker"],
-        "automerge": true,
-        "requiredStatusChecks": null,
-        "updateTypes": ["minor", "patch"],
-        "packageNames": [
-          "node/14-alpine"
-        ]
-      },
-      {
-        "depTypeList": ["devDependencies"],
-        "packagePatterns": ["nodemon"],
-        "automerge": true
-      }
-    ]
-  }
+  "enabled": true,
+  "timezone": "Europe/Helsinki",
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Renovate Dashboard",
+  "commitMessageSuffix": "[ci-skip]",
+  "commitBody": "Signed-off-by: Tero",
+  "suppressNotifications": ["prIgnoreNotification"],
+  "rebaseWhen": "conflicted",
+  "assignees": ["@terotuomala"],
+  "packageRules": [
+    {
+      "datasources": ["docker"],
+      "updateTypes": ["major"],
+      "labels": ["renovate/image-release", "dependency/major"]
+    },
+    {
+      "datasources": ["docker"],
+      "updateTypes": ["minor"],
+      "labels": ["renovate/image-release", "dependency/minor"]
+    },
+    {
+      "datasources": ["docker"],
+      "updateTypes": ["patch"],
+      "labels": ["renovate/image-release", "dependency/patch"]
+    },
+    {
+      "datasources": ["docker"],
+      "automerge": true,
+      "requiredStatusChecks": null,
+      "updateTypes": ["minor", "patch"],
+      "packageNames": [
+        "node/14-alpine"
+      ]
+    },
+    {
+      "depTypeList": ["devDependencies"],
+      "packagePatterns": ["nodemon"],
+      "automerge": true
+    }
+  ]
+}
