@@ -55,7 +55,7 @@ $ brew install k3d
 ## Usage
 Create insecure registry, k3s cluster and wire them up using wrapper script:
 ```sh
-$ ./k3d-create-cluster
+$ ./k3d-create-cluster.sh
 ```
 Make sure your KUBECONFIG points to k3s cluster context (if not already):
 ```sh
