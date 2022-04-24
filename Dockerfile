@@ -1,4 +1,4 @@
-FROM node:16-alpine as build
+FROM node:18-alpine as build
 
 # Change working directory
 WORKDIR /app
@@ -9,7 +9,7 @@ RUN npm install
 
 COPY src ./src
 
-FROM node:16-alpine as release
+FROM node:18-alpine as release
 
 # Switch to user node
 USER node
