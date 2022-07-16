@@ -1,17 +1,17 @@
-FROM node:16-alpine as build
+FROM node:18-slim@sha256:dc51bdd082f355574f0c534ffa1c0d5fcdb825ed673da6486ecd566091b8d8f0 as build
 
 # Change working directory
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY src ./src
 
-FROM node:16-alpine as release
+FROM node:18-slim@sha256:dc51bdd082f355574f0c534ffa1c0d5fcdb825ed673da6486ecd566091b8d8f0 as release
 
-# Switch to user node
+# Switch to non-root user uid=1000(node)
 USER node
 
 # Set node loglevel
@@ -24,3 +24,5 @@ WORKDIR /home/node
 COPY --chown=node:node --from=build /app .
 
 EXPOSE 3000
+
+CMD ["node", "src/index.js"]
