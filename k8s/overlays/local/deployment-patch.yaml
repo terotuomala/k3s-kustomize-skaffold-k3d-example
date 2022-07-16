@@ -16,8 +16,4 @@
 
 - op: add
   path: /spec/template/spec/containers/0/args
-  value: ["yarn run dev"]
-
-- op: add
-  path: /spec/template/spec/containers/0/image
-  value: registry.local:5000/example-app
+  value: ["/home/node/node_modules/nodemon/bin/nodemon.js", "src/index.js"]

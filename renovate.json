@@ -3,39 +3,25 @@
   "timezone": "Europe/Helsinki",
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard",
-  "commitMessageSuffix": "[ci-skip]",
-  "commitBody": "Signed-off-by: Tero",
+  "commitBody": "Signed-off-by: terotuomala",
   "suppressNotifications": ["prIgnoreNotification"],
   "rebaseWhen": "conflicted",
   "assignees": ["@terotuomala"],
+
+  "extends": [
+    "config:base"
+  ],
+
   "packageRules": [
     {
-      "datasources": ["docker"],
-      "updateTypes": ["major"],
-      "labels": ["renovate/image-release", "dependency/major"]
+      "matchDatasources": ["docker"],
+      "automerge": true
     },
     {
-      "datasources": ["docker"],
-      "updateTypes": ["minor"],
-      "labels": ["renovate/image-release", "dependency/minor"]
-    },
-    {
-      "datasources": ["docker"],
-      "updateTypes": ["patch"],
-      "labels": ["renovate/image-release", "dependency/patch"]
-    },
-    {
-      "datasources": ["docker"],
-      "automerge": true,
-      "requiredStatusChecks": null,
+      "matchDatasources": ["npm"],
+      "matchDepTypes": ["dependencies", "devDependencies"],
       "updateTypes": ["minor", "patch"],
-      "packageNames": [
-        "node/14-alpine"
-      ]
-    },
-    {
-      "depTypeList": ["devDependencies"],
-      "packagePatterns": ["nodemon"],
+      "enabled": true,
       "automerge": true
     }
   ]
