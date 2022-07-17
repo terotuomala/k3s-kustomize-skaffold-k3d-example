@@ -16,46 +16,40 @@ An example local [k3s](https://github.com/rancher/k3s) development environment u
 <!-- FEATURES -->
 ## Features
 - Bootstraps k3s cluster in Docker using k3d
-- Creates a local insecure registry in order that Skaffold can push images using local Docker as builder and k3s can pull the images
+- Skaffold loads docker images directly into the k3s cluster
 - Skaffold uses kustomize for building and deploying k8s manifests using [local](#kustomize-directory-structure-based-layout) overlay
-- An example `node.js` app will be bootstrapped with [File sync](https://skaffold.dev/docs/how-tos/filesync/) and [Port forward](https://skaffold.dev/docs/how-tos/portforward/) enabled
+- An example `node.js` app will be bootstrapped with [File sync](https://skaffold.dev/docs/pipeline-stages/filesync/) and [Port forward](https://skaffold.dev/docs/pipeline-stages/port-forwarding/) enabled
 
 <!-- PREREQUISITES -->
 ## Prerequisites
-**NB.** The setup is tested on `macOS Catalina`.
+> **NB.** The setup is tested on `macOS Monterey`.
 
-Docker Desktop [installed](https://docs.docker.com/install/)
+The first prerequisite is to install go-task in order to make the setup a bit easier:
+
 ```sh
-# If you don't want to sign up in order to download Docker
-# use the following command to download the installer directly
-$ curl -s https://download.docker.com/mac/stable/Docker.dmg
+brew install go-task/tap/go-task
 ```
 
-kubectl [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-```sh
-$ brew install kubernetes-cli
-```
+The following prerequisites are used in order to create and manage the local K3s cluster:
 
-kustomize (at least version 2.0.3) [installed](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/INSTALL.md)
-```sh
-brew install kustomize
-```
+- [Docker Desktop](https://docs.docker.com/get-docker/)
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [Kustomize](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/INSTALL.md)
+- [Skaffold](https://skaffold.dev/docs/getting-started/#installing-skaffold)
+- [K3d](https://github.com/rancher/k3d)
 
-Skaffold (at least version v0.38.0) [installed](https://skaffold.dev/docs/getting-started/#installing-skaffold)
-```sh
-$ brew install skaffold
-```
+If you don't have them installed yet you can install them using install-prerequisites task:
 
-k3d (at least version v3.0.0) [installed](https://github.com/rancher/k3d)
 ```sh
-$ brew install k3d
+task install-prerequisites
 ```
 
 <!-- USAGE -->
 ## Usage
-Create insecure registry, k3s cluster and wire them up using wrapper script:
+Create k3s cluster:
+> **NB** If you want to change the amount of k3s agents argument e.g. `k3d:create-cluster -- <number_of_agents>`
 ```sh
-$ ./k3d-create-cluster.sh
+$ task k3d:create-cluster
 ```
 Make sure your KUBECONFIG points to k3s cluster context (if not already):
 ```sh
@@ -63,13 +57,22 @@ $ kubectl get nodes
 ```
 Start the local development environment:
 ```sh
-$ skaffold dev -p local --port-forward
+$ task skaffold:dev
 ```
 An example node.js app is available at:
 ```sh
 localhost:3000
 ```
 Make some changes to `src/index.js` and they will be synchronized to the pod(s) running the app.
+
+Delete the k3s cluster:
+```sh
+task k3d:delete-cluster
+```
+Delete images that are built by Skaffold and stored on the local Docker daemon:
+```sh
+task docker:rmi
+```
 
 <!-- KUSTOMIZE CONFIGURATION -->
 ## Kustomize configuration

@@ -1,0 +1,45 @@
+version: '3'
+
+vars:
+  CLUSTER_NAME: k3s-local
+
+tasks:
+  install-prerequisites:
+    desc: Install prerequisites (docker, kubectl, kustomize, skaffold, k3d)
+    preconditions:
+      - sh: command -v brew
+        msg: Homebrew is required but it's not installed. Aborting.
+    cmds:
+      - brew install docker kubernetes-cli kustomize skaffold k3d
+  
+  k3d:create-cluster:
+    desc: Create a local k3s cluster
+    preconditions:
+      - sh: command -v k3d
+        msg: K3d is required but it's not installed. Aborting.
+    cmds:
+      - >-
+        k3d cluster create "{{.CLUSTER_NAME}}"
+        --servers 1
+        --agents {{.CLI_ARGS | default "1"}}
+        --k3s-arg '--disable=traefik@server:0'
+        --no-lb
+        --wait
+  
+  k3d:delete-cluster:
+    desc: Delete the local k3s cluster
+    cmds:
+      - k3d cluster delete "{{.CLUSTER_NAME}}"
+
+  skaffold:dev:
+    desc: Start the local development environment with port forwarding
+    preconditions:
+      - sh: command -v skaffold
+        msg: Skaffold is required but it's not installed. Aborting.
+    cmds:
+      - skaffold dev -p local --port-forward
+
+  docker:rmi:
+    desc: Delete images that are built by Skaffold and stored on the local Docker daemon
+    cmds:
+      - docker rmi -f $(docker images example-app -q)

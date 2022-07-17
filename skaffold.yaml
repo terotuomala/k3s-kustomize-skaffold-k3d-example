@@ -1,17 +1,14 @@
-apiVersion: skaffold/v2beta9
+apiVersion:  skaffold/v2beta29
 kind: Config
 metadata:
   name: example-app
 build:
   artifacts:
-    - image: registry.local:5000/example-app
+    - image: example-app
       sync:
         manual:
         - src: 'src/**/*.js'
           dest: .
-  local: {}
-  insecureRegistries: 
-    - registry.local:5000
 
 profiles:
   - name: local
@@ -26,6 +23,7 @@ profiles:
       kustomize:
         paths: 
           - k8s/overlays/test
+      kubeContext: k3d-k3s-local
 
 portForward:
   - resourceType: service
