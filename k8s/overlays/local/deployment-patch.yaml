@@ -14,6 +14,6 @@
   path: /spec/template/spec/containers/0/resources/requests/memory
   value: 64Mi
 
-- op: add
-  path: /spec/template/spec/containers/0/args
-  value: ["/home/node/.npm-global/bin/nodemon/bin/nodemon.js", "-L", "src/index.js"]
+# - op: add
+#   path: /spec/template/spec/containers/0/args
+#   value: ["/home/node/.npm-global/bin/nodemon/bin/nodemon.js", "-L", "src/index.js"]
