@@ -9,8 +9,6 @@ build:
         manual:
         - src: 'src/**/*.js'
           dest: .
-  local:
-    push: false
 
 profiles:
   - name: local
