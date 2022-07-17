@@ -16,9 +16,9 @@ An example local [k3s](https://github.com/rancher/k3s) development environment u
 <!-- FEATURES -->
 ## Features
 - Bootstraps k3s cluster in Docker using k3d
-- Creates a local insecure registry in order that Skaffold can push images using local Docker as builder and k3s can pull the images
+- Skaffold loads docker images directly into the k3s cluster
 - Skaffold uses kustomize for building and deploying k8s manifests using [local](#kustomize-directory-structure-based-layout) overlay
-- An example `node.js` app will be bootstrapped with [File sync](https://skaffold.dev/docs/how-tos/filesync/) and [Port forward](https://skaffold.dev/docs/how-tos/portforward/) enabled
+- An example `node.js` app will be bootstrapped with [File sync](https://skaffold.dev/docs/pipeline-stages/filesync/) and [Port forward](https://skaffold.dev/docs/pipeline-stages/port-forwarding/) enabled
 
 <!-- PREREQUISITES -->
 ## Prerequisites
@@ -68,6 +68,10 @@ Make some changes to `src/index.js` and they will be synchronized to the pod(s) 
 Delete the k3s cluster:
 ```sh
 task k3d:delete-cluster
+```
+Delete images that are built by Skaffold and stored on the local Docker daemon:
+```sh
+task docker:rmi
 ```
 
 <!-- KUSTOMIZE CONFIGURATION -->
