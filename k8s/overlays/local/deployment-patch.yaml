@@ -1,18 +1,22 @@
 - op: add
   path: /spec/template/spec/containers/0/resources/limits/cpu
-  value: 25m
+  value: 100m
 
 - op: add
   path: /spec/template/spec/containers/0/resources/limits/memory
-  value: 128Mi
+  value: 256Mi
 
 - op: add
   path: /spec/template/spec/containers/0/resources/requests/cpu
-  value: 15m
+  value: 50m
 
 - op: add
   path: /spec/template/spec/containers/0/resources/requests/memory
-  value: 64Mi
+  value: 128Mi
+
+- op: add
+  path: /spec/template/spec/containers/0/securityContext/readOnlyRootFilesystem
+  value: false
 
 - op: add
   path: /spec/template/spec/containers/0/args
