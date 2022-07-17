@@ -16,4 +16,4 @@
 
 - op: add
   path: /spec/template/spec/containers/0/args
-  value: ["/home/node/node_modules/nodemon/bin/nodemon.js", "src/index.js"]
+  value: ["/home/node/.npm-global/bin/nodemon/bin/nodemon.js", "-L", "src/index.js"]
