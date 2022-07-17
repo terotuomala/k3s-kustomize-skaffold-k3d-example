@@ -5,8 +5,10 @@ metadata:
 build:
   artifacts:
     - image: example-app
-      buildpacks:
-        builder: gcr.io/buildpacks/builder:v1
+      sync:
+        manual:
+        - src: 'src/**/*.js'
+          dest: .
   local:
     push: false
 
