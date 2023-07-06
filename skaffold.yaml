@@ -1,4 +1,4 @@
-apiVersion:  skaffold/v2beta29
+apiVersion: skaffold/v4beta6
 kind: Config
 metadata:
   name: example-app
@@ -7,23 +7,25 @@ build:
     - image: example-app
       sync:
         manual:
-        - src: 'src/**/*.js'
+        - src: 'src/*.js'
           dest: .
 
 profiles:
   - name: local
-    deploy:
+    activation:
+      - kubeContext: k3d-k3s-local
+    manifests:
       kustomize:
         paths: 
           - k8s/overlays/local
-      kubeContext: k3d-k3s-local
 
   - name: test
-    deploy:
+    activation:
+      - kubeContext: k3d-k3s-local
+    manifests:
       kustomize:
         paths: 
           - k8s/overlays/test
-      kubeContext: k3d-k3s-local
 
 portForward:
   - resourceType: service
