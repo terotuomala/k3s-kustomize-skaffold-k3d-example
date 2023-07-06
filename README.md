@@ -47,15 +47,15 @@ task install-prerequisites
 Create k3s cluster:
 > **NB** If you want to change the amount of k3s agents argument e.g. `k3d:create-cluster -- <number_of_agents>`
 ```sh
-$ task k3d:create-cluster
+task k3d:create-cluster
 ```
 Make sure your KUBECONFIG points to k3s cluster context (if not already):
 ```sh
-$ kubectl get nodes
+kubectl get nodes
 ```
 Start the local development environment:
 ```sh
-$ task skaffold:dev
+task skaffold:dev
 ```
 An example node.js app is available at:
 ```sh

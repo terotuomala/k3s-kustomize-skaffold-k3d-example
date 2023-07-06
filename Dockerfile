@@ -1,4 +1,4 @@
-FROM node:18-slim as build
+FROM node:20-slim as build
 
 # Change working directory
 WORKDIR /app
@@ -8,7 +8,7 @@ COPY src ./src
 RUN npm i -g nodemon
 
 
-FROM node:18-slim as release
+FROM node:20-slim as release
 
 # Switch to non-root user uid=1000(node)
 USER node
